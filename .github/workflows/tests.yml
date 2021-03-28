@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  junit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Version
+        run: |
+          export VERSION=$(cat VERSION)\.${GITHUB_RUN_ID}
+          sed -i 's/999\.999\.999\.999999/'${VERSION}'/g' pom.xml
+          cat pom.xml
+
+      - name: Install
+        run: mvn install
+
+      - name: Verify
+        run: mvn verify
+
+      - name: Compile
+        run: mvn compile
+
+      - name: Test
+        run: mvn test
+
+      - name: Package
+        run: mvn package
+
+      - name: Deploy
+        run: mvn deploy
