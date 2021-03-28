@@ -17,12 +17,6 @@ jobs:
         with:
           java-version: 11
 
-      - name: Version
-        run: |
-          export VERSION=$(cat VERSION)\.${GITHUB_RUN_ID}
-          sed -i 's/999\.999\.999\.999999/'${VERSION}'/g' pom.xml
-          cat pom.xml
-
       - name: Install
         run: mvn install
 
@@ -38,5 +32,17 @@ jobs:
       - name: Package
         run: mvn package
 
-      - name: Deploy
-        run: mvn deploy
+      - name: Publish package
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          git checkout -- pom.xml
+          export VERSION=$(cat VERSION)\.${GITHUB_RUN_ID}
+          sed -i 's/999\.999\.999\.999999/'${VERSION}'/g' pom.xml
+          mvn --batch-mode deploy
+
+          git checkout -- pom.xml
+          export VERSION=$(cat VERSION)
+          sed -i 's/999\.999\.999\.999999/'${VERSION}'/g' pom.xml
+          mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
