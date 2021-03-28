@@ -32,14 +32,18 @@ jobs:
       - name: Package
         run: mvn package
 
-      - name: Publish package
-        if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Deploy
         run: |
           git checkout -- pom.xml
           export VERSION=$(cat VERSION)\.${GITHUB_RUN_ID}
           sed -i 's/999\.999\.999\.999999/'${VERSION}'/g' pom.xml
           mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Publish package
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
           git checkout -- pom.xml
           export VERSION=$(cat VERSION)
           sed -i 's/999\.999\.999\.999999/'${VERSION}'/g' pom.xml
