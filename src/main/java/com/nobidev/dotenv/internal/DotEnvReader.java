@@ -1,6 +1,6 @@
 package com.nobidev.dotenv.internal;
 
-import com.nobidev.dotenv.DotenvException;
+import com.nobidev.dotenv.DotEnvException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,16 +11,16 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DotenvReader {
+public class DotEnvReader {
     protected final String directory;
     protected final String filename;
 
-    public DotenvReader(String directory, String filename) {
+    public DotEnvReader(String directory, String filename) {
         this.directory = directory;
         this.filename = filename;
     }
 
-    public List<String> read() throws DotenvException, IOException {
+    public List<String> read() throws DotEnvException, IOException {
         String dir = directory
                 .replaceAll("\\\\", "/")
                 .replaceFirst("\\.env$", "")
@@ -42,10 +42,10 @@ public class DotenvReader {
             return ClasspathHelper
                     .loadFileFromClasspath(location.replaceFirst("./", "/"))
                     .collect(Collectors.toList());
-        } catch (DotenvException e) {
+        } catch (DotEnvException e) {
             Path cwd = FileSystems.getDefault().getPath(".").toAbsolutePath().normalize();
             String cwdMessage = !path.isAbsolute() ? "(working directory: " + cwd + ")" : "";
-            e.addSuppressed(new DotenvException("Could not find " + path + " on the file system " + cwdMessage));
+            e.addSuppressed(new DotEnvException("Could not find " + path + " on the file system " + cwdMessage));
             throw e;
         }
     }

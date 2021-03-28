@@ -1,8 +1,8 @@
 package com.nobidev.dotenv.tests;
 
-import com.nobidev.dotenv.Dotenv;
-import com.nobidev.dotenv.DotenvEntry;
-import com.nobidev.dotenv.DotenvException;
+import com.nobidev.dotenv.DotEnv;
+import com.nobidev.dotenv.DotEnvEntry;
+import com.nobidev.dotenv.DotEnvException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class DotenvTests {
+public class DotEnvTests {
     private Map<String, String> envVars;
 
     @Before
@@ -24,14 +24,14 @@ public class DotenvTests {
         envVars.put("WITHOUT_VALUE", "");
     }
 
-    @Test(expected = DotenvException.class)
+    @Test(expected = DotEnvException.class)
     public void throwIfMalformedConfigured() {
-        Dotenv.configure().load();
+        DotEnv.configure().load();
     }
 
-    @Test(expected = DotenvException.class)
+    @Test(expected = DotEnvException.class)
     public void load() {
-        Dotenv dotenv = Dotenv.load();
+        DotEnv dotenv = DotEnv.load();
 
         for (String envName : envVars.keySet()) {
             assertEquals(envVars.get(envName), dotenv.get(envName));
@@ -39,8 +39,8 @@ public class DotenvTests {
     }
 
     @Test
-    public void iteratorOverDotenv() {
-        Dotenv dotenv = Dotenv.configure()
+    public void iteratorOverDotEnv() {
+        DotEnv dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
 
@@ -48,19 +48,19 @@ public class DotenvTests {
                 .entries()
                 .forEach(e -> assertEquals(dotenv.get(e.getKey()), e.getValue()));
 
-        for (DotenvEntry e : dotenv.entries()) {
+        for (DotEnvEntry e : dotenv.entries()) {
             assertEquals(dotenv.get(e.getKey()), e.getValue());
         }
     }
 
     @Test
-    public void iteratorOverDotenvWithFilter() {
-        Dotenv dotenv = Dotenv.configure()
+    public void iteratorOverDotEnvWithFilter() {
+        DotEnv dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
 
-        Set<DotenvEntry> entriesInFile = dotenv.entries(Dotenv.Filter.DECLARED_IN_ENV_FILE);
-        Set<DotenvEntry> entriesAll = dotenv.entries();
+        Set<DotEnvEntry> entriesInFile = dotenv.entries(DotEnv.Filter.DECLARED_IN_ENV_FILE);
+        Set<DotEnvEntry> entriesAll = dotenv.entries();
         assertTrue(entriesInFile.size() < entriesAll.size());
 
         for (Map.Entry<String, String> e : envVars.entrySet()) {
@@ -69,12 +69,12 @@ public class DotenvTests {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void failToRemoveFromDotenv() {
-        Dotenv dotenv = Dotenv.configure()
+    public void failToRemoveFromDotEnv() {
+        DotEnv dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
 
-        Iterator<DotenvEntry> iter = dotenv.entries().iterator();
+        Iterator<DotEnvEntry> iter = dotenv.entries().iterator();
         while (iter.hasNext()) {
             iter.next();
             iter.remove();
@@ -82,18 +82,18 @@ public class DotenvTests {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void failToAddToDotenv() {
+    public void failToAddToDotEnv() {
 
-        Dotenv dotenv = Dotenv.configure()
+        DotEnv dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
 
-        dotenv.entries().add(new DotenvEntry("new", "value"));
+        dotenv.entries().add(new DotEnvEntry("new", "value"));
     }
 
     @Test
     public void configureWithIgnoreMalformed() {
-        Dotenv dotenv = Dotenv.configure()
+        DotEnv dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
 
@@ -104,7 +104,7 @@ public class DotenvTests {
 
     @Test
     public void configureWithIgnoreMissingAndMalformed() {
-        Dotenv dotenv = Dotenv.configure()
+        DotEnv dotenv = DotEnv.configure()
                 .directory("/missing/dir")
                 .ignoreIfMalformed()
                 .ignoreIfMissing()

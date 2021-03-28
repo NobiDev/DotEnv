@@ -1,7 +1,7 @@
 package com.nobidev.dotenv.internal;
 
-import com.nobidev.dotenv.DotenvEntry;
-import com.nobidev.dotenv.DotenvException;
+import com.nobidev.dotenv.DotEnvEntry;
+import com.nobidev.dotenv.DotEnvException;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 
 import static java.util.Collections.emptyList;
 
-public abstract class DotenvParserAbstract {
-    protected DotenvReader reader;
+public abstract class DotEnvParserAbstract {
+    protected DotEnvReader reader;
     protected boolean throwIfMissing;
     protected boolean throwIfMalformed;
 
@@ -23,22 +23,22 @@ public abstract class DotenvParserAbstract {
     }
 
     @SuppressWarnings("SameParameterValue")
-    protected static DotenvEntry matchEntry(String regex, String text) {
+    protected static DotEnvEntry matchEntry(String regex, String text) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
         boolean result = matcher.matches();
         if (!result || matcher.groupCount() < 3) return null;
-        return new DotenvEntry(matcher.group(1), matcher.group(3));
+        return new DotEnvEntry(matcher.group(1), matcher.group(3));
     }
 
-    protected List<String> lines() throws DotenvException {
+    protected List<String> lines() throws DotEnvException {
         try {
             return reader.read();
-        } catch (DotenvException e) {
+        } catch (DotEnvException e) {
             if (throwIfMissing) throw e;
             return emptyList();
         } catch (IOException e) {
-            throw new DotenvException(e);
+            throw new DotEnvException(e);
         }
     }
 
