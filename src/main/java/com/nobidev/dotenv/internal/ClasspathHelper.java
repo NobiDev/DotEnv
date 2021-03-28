@@ -1,6 +1,6 @@
 package com.nobidev.dotenv.internal;
 
-import com.nobidev.dotenv.DotenvException;
+import com.nobidev.dotenv.DotEnvException;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +21,7 @@ public class ClasspathHelper {
         }
 
         if (inputStream == null) {
-            throw new DotenvException("Could not find " + location + " on the classpath");
+            throw new DotEnvException("Could not find " + location + " on the classpath");
         }
         Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8);
         List<String> lines = new ArrayList<>();

@@ -1,11 +1,11 @@
 package com.nobidev.dotenv;
 
-public class DotenvEntry {
+public class DotEnvEntry {
 
     protected final String key;
     protected final String value;
 
-    public DotenvEntry(String key, String value) {
+    public DotEnvEntry(String key, String value) {
         this.key = key;
         this.value = value;
     }

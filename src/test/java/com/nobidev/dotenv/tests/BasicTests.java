@@ -1,7 +1,7 @@
 package com.nobidev.dotenv.tests;
 
-import com.nobidev.dotenv.Dotenv;
-import com.nobidev.dotenv.DotenvException;
+import com.nobidev.dotenv.DotEnv;
+import com.nobidev.dotenv.DotEnvException;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,16 +17,16 @@ public class BasicTests {
         put("MULTI_LINE", "Hello\\nWorld");
     }};
 
-    @Test(expected = DotenvException.class)
+    @Test(expected = DotEnvException.class)
     public void dotenvMalformed() {
-        Dotenv.configure()
+        DotEnv.configure()
                 .directory("./src/test/resources")
                 .load();
     }
 
     @Test
     public void dotenvIgnoreMalformed() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .directory("./src/test/resources")
                 .ignoreIfMalformed()
                 .load();
@@ -41,7 +41,7 @@ public class BasicTests {
 
     @Test
     public void dotenvFilename() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .directory("./src/test/resources")
                 .filename("env")
                 .ignoreIfMalformed()
@@ -57,7 +57,7 @@ public class BasicTests {
 
     @Test
     public void resourceRelative() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .directory("./")
                 .ignoreIfMalformed()
                 .load();
@@ -68,7 +68,7 @@ public class BasicTests {
 
     @Test
     public void resourceCurrent() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
         assertEquals("my test ev 1", dotenv.get("MY_TEST_EV1"));
@@ -78,7 +78,7 @@ public class BasicTests {
 
     @Test
     public void resourceCurrentWithDefaultValue() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
         assertEquals("default_value", dotenv.get("MY_TEST_EV_NOT_EXIST", "default_value"));
@@ -88,7 +88,7 @@ public class BasicTests {
 
     @Test
     public void systemProperties() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .systemProperties()
                 .load();
@@ -101,7 +101,7 @@ public class BasicTests {
 
     @Test
     public void noSystemProperties() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
 
@@ -111,8 +111,8 @@ public class BasicTests {
     }
 
     @Test
-    public void iterateOverDotenv() {
-        var dotenv = Dotenv.configure()
+    public void iterateOverDotEnv() {
+        var dotenv = DotEnv.configure()
                 .ignoreIfMalformed()
                 .load();
 
@@ -121,16 +121,16 @@ public class BasicTests {
         }
     }
 
-    @Test(expected = DotenvException.class)
+    @Test(expected = DotEnvException.class)
     public void dotenvMissing() {
-        Dotenv.configure()
+        DotEnv.configure()
                 .directory("/missing/.env")
                 .load();
     }
 
     @Test
     public void dotenvIgnoreMissing() {
-        var dotenv = Dotenv.configure()
+        var dotenv = DotEnv.configure()
                 .directory("/missing/.env")
                 .ignoreIfMissing()
                 .load();
@@ -140,7 +140,7 @@ public class BasicTests {
         assertNull(dotenv.get("MY_TEST_EV1"));
     }
 
-    private void assertHostEnvVar(Dotenv env) {
+    private void assertHostEnvVar(DotEnv env) {
         var isWindows = System.getProperty("os.name").toLowerCase().contains("win");
         if (isWindows) {
             var path = env.get("PATH");

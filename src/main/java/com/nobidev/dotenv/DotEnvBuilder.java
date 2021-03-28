@@ -1,83 +1,83 @@
 package com.nobidev.dotenv;
 
-import com.nobidev.dotenv.internal.DotenvParser;
-import com.nobidev.dotenv.internal.DotenvReader;
+import com.nobidev.dotenv.internal.DotEnvParser;
+import com.nobidev.dotenv.internal.DotEnvReader;
 
 import java.util.*;
 
 import static java.util.stream.Collectors.*;
 
-public class DotenvBuilder {
+public class DotEnvBuilder {
     protected String filename = ".env";
     protected String directoryPath = "./";
     protected boolean systemProperties = false;
     protected boolean throwIfMissing = true;
     protected boolean throwIfMalformed = true;
 
-    public DotenvBuilder directory(String path) {
+    public DotEnvBuilder directory(String path) {
         this.directoryPath = path;
         return this;
     }
 
-    public DotenvBuilder filename(String name) {
+    public DotEnvBuilder filename(String name) {
         filename = name;
         return this;
     }
 
-    public DotenvBuilder ignoreIfMissing() {
+    public DotEnvBuilder ignoreIfMissing() {
         throwIfMissing = false;
         return this;
     }
 
-    public DotenvBuilder ignoreIfMalformed() {
+    public DotEnvBuilder ignoreIfMalformed() {
         throwIfMalformed = false;
         return this;
     }
 
-    public DotenvBuilder systemProperties() {
+    public DotEnvBuilder systemProperties() {
         systemProperties = true;
         return this;
     }
 
-    public Dotenv load() throws DotenvException {
-        DotenvParser reader = new DotenvParser(
-                new DotenvReader(directoryPath, filename),
+    public DotEnv load() throws DotEnvException {
+        DotEnvParser reader = new DotEnvParser(
+                new DotEnvReader(directoryPath, filename),
                 throwIfMissing,
                 throwIfMalformed);
-        List<DotenvEntry> env = reader.parse();
+        List<DotEnvEntry> env = reader.parse();
         if (systemProperties) {
             env.forEach(it -> System.setProperty(it.getKey(), it.getValue()));
         }
-        return new DotenvImpl(env);
+        return new DotEnvImpl(env);
     }
 
-    static class DotenvImpl implements Dotenv {
+    static class DotEnvImpl implements DotEnv {
         protected final Map<String, String> envVars;
-        protected final Set<DotenvEntry> set;
-        protected final Set<DotenvEntry> setInFile;
+        protected final Set<DotEnvEntry> set;
+        protected final Set<DotEnvEntry> setInFile;
         protected final Map<String, String> envVarsInFile;
 
-        public DotenvImpl(List<DotenvEntry> envVars) {
-            this.envVarsInFile = envVars.stream().collect(toMap(DotenvEntry::getKey, DotenvEntry::getValue));
+        public DotEnvImpl(List<DotEnvEntry> envVars) {
+            this.envVarsInFile = envVars.stream().collect(toMap(DotEnvEntry::getKey, DotEnvEntry::getValue));
             this.envVars = new HashMap<>(this.envVarsInFile);
             System.getenv().forEach(this.envVars::put);
 
             this.set = this.envVars.entrySet().stream()
-                    .map(it -> new DotenvEntry(it.getKey(), it.getValue()))
+                    .map(it -> new DotEnvEntry(it.getKey(), it.getValue()))
                     .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
 
             this.setInFile = this.envVarsInFile.entrySet().stream()
-                    .map(it -> new DotenvEntry(it.getKey(), it.getValue()))
+                    .map(it -> new DotEnvEntry(it.getKey(), it.getValue()))
                     .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
         }
 
         @Override
-        public Set<DotenvEntry> entries() {
+        public Set<DotEnvEntry> entries() {
             return set;
         }
 
         @Override
-        public Set<DotenvEntry> entries(Dotenv.Filter filter) {
+        public Set<DotEnvEntry> entries(DotEnv.Filter filter) {
             if (filter != null) return setInFile;
             return entries();
         }
