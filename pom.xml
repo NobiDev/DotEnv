@@ -17,7 +17,7 @@
         <!-- Compiler -->
         <maven.compiler.target>11</maven.compiler.target> <!-- Recommended is Java 11 -->
         <maven.compiler.source>11</maven.compiler.source> <!-- Recommended is Java 11 -->
-        <maven.compiler.release>7</maven.compiler.release>
+        <maven.compiler.release>11</maven.compiler.release>
 
         <!-- Java -->
         <java.version>11</java.version> <!-- Keep it the latest LTS version -->
