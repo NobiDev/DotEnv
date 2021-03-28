@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.nobidev</groupId> <!-- Name of the group -->
+    <artifactId>dotenv</artifactId> <!-- Please keep this name, it is often used for cross-references -->
+    <version>999.999.999.999999</version><!-- Will be replaced in the CI/CD -->
+    <name>DotEnv</name> <!-- Display Name -->
+    <description>Project DotEnv</description> <!-- Keep it short and cool -->
+    <url>https://github.com/NobiDev/DotEnv</url> <!-- Link to the source code page -->
+    <organization>
+        <name>NobiDev</name>
+        <url>https://github.com/NobiDev</url>
+    </organization>
+    <properties>
+        <!-- Compiler -->
+        <maven.compiler.target>11</maven.compiler.target> <!-- Recommended is Java 11 -->
+        <maven.compiler.source>11</maven.compiler.source> <!-- Recommended is Java 11 -->
+        <maven.compiler.release>7</maven.compiler.release>
+
+        <!-- Java -->
+        <java.version>11</java.version> <!-- Keep it the latest LTS version -->
+
+        <!-- Project -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- Always use UTF-8 -->
+
+        <!-- Main -->
+        <main.class>com.nobidev.dotenv.Dotenv</main.class> <!-- Ideal starting point -->
+
+        <!-- Test -->
+        <test.junit.version>4.12</test.junit.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${test.junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

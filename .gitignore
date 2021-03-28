@@ -1,0 +1,6 @@
+# Target
+/target/
+/bin/
+
+# IntelliJ IDEA
+/.idea/
